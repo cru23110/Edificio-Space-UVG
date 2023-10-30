@@ -1,0 +1,30 @@
+public class AmericanExpressPaymentGateway implements PaymentGateway {
+    public void processPayment(PaymentInfo paymentInfo) {
+        // Procesar el pago con la pasarela de pago de American Express
+        double serviceFee = paymentInfo.getAmount() * 0.07;
+        if (paymentInfo.getInstallments() > 0) {
+            serviceFee += paymentInfo.getAmount() * 0.15;
+        }
+        double totalAmount = paymentInfo.getAmount() + serviceFee;
+
+        // Formatear el archivo a CSV con código hash MD5
+        paymentInfo.setAmount(totalAmount);
+        String md5Hash = calculateMD5Hash(paymentInfo);
+        paymentInfo.setHashMd5(md5Hash);
+
+        String csvData = paymentInfo.toCsv();
+
+        try {
+            FileWriter fileWriter = new FileWriter("payment_amex.csv");
+            fileWriter.write(csvData);
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String calculateMD5Hash(PaymentInfo paymentInfo) {
+        // cálculo del MD5 hash
+        return ""; //... luego lo agrego
+    }
+}
